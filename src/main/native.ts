@@ -20,6 +20,7 @@ export type NativeHandler<TSchema extends OptionsSchema> = (context: MainContext
 export interface PluginNative<TSchema extends OptionsSchema> {
     readonly blocklist?: Partial<Blocklist>;
     readonly handlers?: Readonly<Record<string, NativeHandler<TSchema>>>;
+    readonly hooks?: Readonly<Record<string, NativeHandler<TSchema>>>;
     start?(context: MainContext<TSchema>): void;
 }
 
@@ -31,12 +32,21 @@ export interface NativeHost {
 }
 
 export type BoundHandler = (args: readonly unknown[]) => unknown;
+export type PatchHooks = Readonly<Record<string, (...args: readonly unknown[]) => unknown>>;
+
+export interface ActivatedNative {
+    readonly handlers: ReadonlyMap<string, BoundHandler>;
+    readonly hooks: PatchHooks;
+}
 
 export interface NativeBinding {
     readonly plugin: PluginDefinition;
     readonly blocklist: Blocklist;
-    start(host: NativeHost): ReadonlyMap<string, BoundHandler>;
+    start(host: NativeHost): ActivatedNative;
 }
+
+const bind = <TSchema extends OptionsSchema>(context: MainContext<TSchema>, functions: Readonly<Record<string, NativeHandler<TSchema>>> | undefined) =>
+    Object.entries(functions ?? {}).map(([name, handler]) => [name, (args: readonly unknown[]) => handler(context, ...args)] as const);
 
 export const defineNative = <TSchema extends OptionsSchema>(plugin: PluginDefinition<TSchema>, native: PluginNative<TSchema>): NativeBinding => ({
     plugin,
@@ -52,6 +62,9 @@ export const defineNative = <TSchema extends OptionsSchema>(plugin: PluginDefini
             broadcast: (event, payload) => host.broadcast(plugin.name, event, payload)
         };
         native.start?.(context);
-        return new Map(Object.entries(native.handlers ?? {}).map(([name, handler]) => [name, (args: readonly unknown[]) => handler(context, ...args)]));
+        return {
+            handlers: new Map(bind(context, native.handlers)),
+            hooks: Object.fromEntries(bind(context, native.hooks).map(([name, call]) => [name, (...args: readonly unknown[]) => call(args)]))
+        };
     }
 });

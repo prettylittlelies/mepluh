@@ -1,6 +1,8 @@
 import { IDENTIFIER_PATTERN, IDENTIFIER_TOKEN, SELF_TOKEN } from "./constants";
 import type { Patch, PluginDefinition, Replacement } from "./plugin";
 
+export type PatchRealm = "renderer" | "main";
+
 export interface PatchFailure {
     readonly plugin: string;
     readonly match: string;
@@ -24,23 +26,28 @@ interface CompiledPatch {
     readonly replacements: readonly CompiledReplacement[];
 }
 
+const SELF_REFERENCES: Readonly<Record<PatchRealm, (plugin: string) => string>> = {
+    renderer: plugin => `globalThis.Mepluh.plugin(${JSON.stringify(plugin)})`,
+    main: plugin => `globalThis.MepluhMain?.plugin(${JSON.stringify(plugin)})`
+};
+
 const canonicalize = (pattern: RegExp): RegExp =>
     new RegExp(pattern.source.replaceAll(IDENTIFIER_TOKEN, IDENTIFIER_PATTERN), pattern.flags);
 
-const selfReference = (plugin: string): string => `globalThis.Mepluh.plugin(${JSON.stringify(plugin)})`;
-
 const toArray = <T>(value: T | readonly T[]): readonly T[] => (Array.isArray(value) ? value : [value as T]);
 
-const compileReplacement = (plugin: string, { match, replace }: Replacement): CompiledReplacement => ({
+const patchesFor = (plugin: PluginDefinition, realm: PatchRealm): readonly Patch[] => (realm === "main" ? plugin.mainPatches : plugin.patches) ?? [];
+
+const compileReplacement = (plugin: string, realm: PatchRealm, { match, replace }: Replacement): CompiledReplacement => ({
     match: typeof match === "string" ? match : canonicalize(match),
-    replace: replace.replaceAll(SELF_TOKEN, selfReference(plugin)),
+    replace: replace.replaceAll(SELF_TOKEN, SELF_REFERENCES[realm](plugin)),
     label: String(match)
 });
 
-const compilePatch = (plugin: string, patch: Patch): CompiledPatch => ({
+const compilePatch = (plugin: string, realm: PatchRealm, patch: Patch): CompiledPatch => ({
     plugin,
     find: typeof patch.find === "string" ? patch.find : canonicalize(patch.find),
-    replacements: toArray(patch.replacement).map(replacement => compileReplacement(plugin, replacement))
+    replacements: toArray(patch.replacement).map(replacement => compileReplacement(plugin, realm, replacement))
 });
 
 const matchesFind = (source: string, find: RegExp | string): boolean =>
@@ -49,8 +56,8 @@ const matchesFind = (source: string, find: RegExp | string): boolean =>
 export class SourcePatcher {
     private readonly patches: readonly CompiledPatch[];
 
-    public constructor(plugins: readonly PluginDefinition[]) {
-        this.patches = plugins.flatMap(plugin => (plugin.patches ?? []).map(patch => compilePatch(plugin.name, patch)));
+    public constructor(plugins: readonly PluginDefinition[], realm: PatchRealm) {
+        this.patches = plugins.flatMap(plugin => patchesFor(plugin, realm).map(patch => compilePatch(plugin.name, realm, patch)));
     }
 
     public get isEmpty(): boolean {

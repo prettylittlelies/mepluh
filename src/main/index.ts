@@ -12,7 +12,9 @@ import { NodeRequestGuard } from "./network/nodeRequestGuard";
 import { RequestBlocker } from "./network/requestBlocker";
 import { launchOriginalApp } from "./originalApp";
 import { resolvePaths } from "./paths";
-import { PatchedFileProtocol } from "./protocol/patchedFileProtocol";
+import { MainModulePatcher } from "./patching/mainModulePatcher";
+import { PatchLedger } from "./patching/patchLedger";
+import { PatchedFileProtocol } from "./patching/patchedFileProtocol";
 import { SettingsStore } from "./settingsStore";
 import { ThemeService } from "./themes/themeService";
 
@@ -26,11 +28,14 @@ try {
     const store = new SettingsStore(paths.settings, plugins, log.child("settings"));
     const enabled = plugins.filter(plugin => isEnabled(plugin, store.current));
     const runtime = new NativeRuntime(natives, store, paths, log.child("native"));
-    const fileProtocol = new PatchedFileProtocol(paths.originalAsar, new SourcePatcher(enabled), log.child("patcher"));
+    const ledger = new PatchLedger(paths.originalAsar, log.child("patcher"));
+    const fileProtocol = new PatchedFileProtocol(new SourcePatcher(enabled, "renderer"), ledger, log.child("patcher"));
     const blocker = new RequestBlocker(runtime.blocklists, log.child("network"));
     const themes = new ThemeService({ builtin: paths.builtinThemes, local: paths.themes }, log.child("themes"));
 
-    registerIpcBridge({ paths, store, runtime, patches: fileProtocol, themes });
+    globalThis.MepluhMain = { plugin: name => runtime.hooksOf(name) };
+    registerIpcBridge({ paths, store, runtime, patches: ledger, themes });
+    new MainModulePatcher(new SourcePatcher(enabled, "main"), ledger).hook();
     fileProtocol.hook();
     new NodeRequestGuard(blocker.urls, log.child("network:node")).install();
 

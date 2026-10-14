@@ -32,6 +32,7 @@ export interface PluginDefinition<TSchema extends OptionsSchema = OptionsSchema>
     readonly required?: boolean;
     readonly options?: TSchema;
     readonly patches?: readonly Patch[];
+    readonly mainPatches?: readonly Patch[];
     readonly styles?: string;
     start?(context: RendererContext<TSchema>): void | Promise<void>;
     stop?(): void;

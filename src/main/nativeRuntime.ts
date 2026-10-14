@@ -4,12 +4,12 @@ import type { Logger } from "@shared/logger";
 import type { OptionsSchema, ResolvedOptions } from "@shared/options";
 import type { PluginDefinition } from "@shared/plugin";
 import { isEnabled, optionsOf } from "@shared/settingsResolver";
-import type { BoundHandler, NativeBinding, NativeHost } from "./native";
+import type { ActivatedNative, NativeBinding, NativeHost, PatchHooks } from "./native";
 import type { ModPaths } from "./paths";
 import type { SettingsStore } from "./settingsStore";
 
 export class NativeRuntime implements NativeHost {
-    private readonly handlers = new Map<string, ReadonlyMap<string, BoundHandler>>();
+    private readonly activated = new Map<string, ActivatedNative>();
     private readonly active: readonly NativeBinding[];
     public readonly pluginNames: readonly string[];
 
@@ -30,11 +30,15 @@ export class NativeRuntime implements NativeHost {
     public start(): void {
         for (const binding of this.active) {
             try {
-                this.handlers.set(binding.plugin.name, binding.start(this));
+                this.activated.set(binding.plugin.name, binding.start(this));
             } catch (error) {
                 this.log.error(`Failed to start native for ${binding.plugin.name}`, error);
             }
         }
+    }
+
+    public hooksOf(plugin: string): PatchHooks | undefined {
+        return this.activated.get(plugin)?.hooks;
     }
 
     public options<TSchema extends OptionsSchema>(plugin: PluginDefinition<TSchema>): ResolvedOptions<TSchema> {
@@ -57,7 +61,7 @@ export class NativeRuntime implements NativeHost {
     }
 
     public invoke(plugin: string, handler: string, args: readonly unknown[]): unknown {
-        const bound = this.handlers.get(plugin)?.get(handler);
+        const bound = this.activated.get(plugin)?.handlers.get(handler);
         if (!bound) throw new Error(`No native handler ${plugin}.${handler} is active`);
         return bound(args);
     }

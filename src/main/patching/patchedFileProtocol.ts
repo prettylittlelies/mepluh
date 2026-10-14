@@ -1,9 +1,9 @@
 import { net, protocol } from "electron";
-import { extname, normalize, sep } from "node:path";
+import { extname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Logger } from "@shared/logger";
 import type { SourcePatcher } from "@shared/patcher";
-import type { PatchReport, PatchReportEntry } from "@shared/patchReport";
+import type { PatchLedger } from "./patchLedger";
 
 type Handler = (request: Request) => Response | Promise<Response>;
 type Handle = (scheme: string, handler: Handler) => void;
@@ -13,22 +13,15 @@ const SCRIPT_EXTENSIONS: ReadonlySet<string> = new Set([".js", ".mjs"]);
 const passthrough: Handler = request => net.fetch(request, { bypassCustomProtocolHandlers: true });
 
 export class PatchedFileProtocol {
-    private readonly root: string;
     private readonly cache = new Map<string, Promise<string>>();
-    private readonly entries: PatchReportEntry[] = [];
     private readonly handle: Handle;
 
     public constructor(
-        asarPath: string,
         private readonly patcher: SourcePatcher,
+        private readonly ledger: PatchLedger,
         private readonly log: Logger
     ) {
-        this.root = normalize(asarPath + sep).toLowerCase();
         this.handle = protocol.handle.bind(protocol);
-    }
-
-    public get report(): PatchReport {
-        return { entries: [...this.entries] };
     }
 
     public hook(): void {
@@ -63,27 +56,15 @@ export class PatchedFileProtocol {
     }
 
     private isPatchable(path: string): boolean {
-        return path.toLowerCase().startsWith(this.root) && SCRIPT_EXTENSIONS.has(extname(path).toLowerCase());
+        return this.ledger.owns(path) && SCRIPT_EXTENSIONS.has(extname(path).toLowerCase());
     }
 
     private load(path: string, response: Response): Promise<string> {
         const cached = this.cache.get(path);
         if (cached) return cached;
-        const pending = response.text().then(source => this.transform(path, source));
+        const pending = response.text().then(source => this.ledger.transform(this.patcher, path, source));
         this.cache.set(path, pending);
         pending.catch(() => this.cache.delete(path));
         return pending;
-    }
-
-    private transform(path: string, original: string): string {
-        const relative = path.slice(this.root.length);
-        const { source, applied, failures } = this.patcher.apply(original);
-        if (applied.length > 0) this.log.info(`Patched ${relative} via`, applied.join(", "));
-        failures.forEach(({ plugin, match }) => this.log.warn(`${plugin}: no match for ${match} in ${relative}`));
-        this.entries.push(
-            ...applied.map(plugin => ({ plugin, file: relative, status: "applied" as const })),
-            ...failures.map(({ plugin, match }) => ({ plugin, file: relative, status: "failed" as const, match }))
-        );
-        return source;
     }
 }
