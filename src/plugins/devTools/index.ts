@@ -8,6 +8,7 @@ export default definePlugin({
     options: {
         detached: {
             type: "boolean",
+            label: "Detached window",
             description: "Open DevTools in a separate window",
             default: true
         }

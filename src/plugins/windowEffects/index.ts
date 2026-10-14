@@ -28,13 +28,15 @@ export default definePlugin({
     options: {
         material: {
             type: "select",
-            description: "Backdrop material",
+            label: "Material",
+            description: "The native Windows 11 backdrop behind Medal",
             default: "liquid-glass",
             choices: WINDOW_MATERIALS
         },
         glassVariant: {
             type: "select",
-            description: "Liquid Glass variant",
+            label: "Glass variant",
+            description: "Regular keeps text legible; Clear is maximally transparent",
             default: "regular",
             choices: GLASS_VARIANTS
         }

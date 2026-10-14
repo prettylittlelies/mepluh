@@ -1,5 +1,6 @@
 interface OptionBase<TType extends string, TValue> {
     readonly type: TType;
+    readonly label: string;
     readonly description: string;
     readonly default: TValue;
 }

@@ -9,11 +9,6 @@ import { Card } from "../ui/Card";
 import { QuickAction } from "../ui/QuickAction";
 import { ThemeCard } from "./ThemeCard";
 
-const WINDOW_OPTION_LABELS: Readonly<Record<keyof typeof windowEffects.options, string>> = {
-    material: "Material",
-    glassVariant: "Glass variant"
-};
-
 const GROUPS: readonly { readonly source: ThemeSource; readonly title: string }[] = [
     { source: "builtin", title: "Built-in Themes" },
     { source: "local", title: "Your Themes" }
@@ -50,13 +45,12 @@ const WindowEffectsSection = ({ context }: { readonly context: SettingsContext }
                 description={<Description>{windowEffects.description} Requires a restart.</Description>}
                 handler={<Handler>{labelId => <Switch aria-labelledby={labelId} checked={settings.enabled} onCheckedChange={enabled => void plugins.setEnabled(windowEffects, enabled)} />}</Handler>}
             />
-            {(Object.keys(WINDOW_OPTION_LABELS) as (keyof typeof WINDOW_OPTION_LABELS)[]).map(key => (
+            {Object.entries(windowEffects.options).map(([key, option]) => (
                 <OptionRow
                     key={key}
                     id={`mepluh-window-effects-${key}`}
-                    name={WINDOW_OPTION_LABELS[key]}
-                    option={windowEffects.options[key]}
-                    value={settings.options[key] ?? windowEffects.options[key].default}
+                    option={option}
+                    value={settings.options[key] ?? option.default}
                     onChange={value => void plugins.setOption(windowEffects, key, value)}
                 />
             ))}

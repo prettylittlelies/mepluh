@@ -11,6 +11,7 @@ export default definePlugin({
     options: {
         overrides: {
             type: "text",
+            label: "Flag overrides",
             description: 'JSON object merged over the remote flags, e.g. {"ads-enabled": false}',
             default: "{}"
         }
