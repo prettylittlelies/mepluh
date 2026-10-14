@@ -1,5 +1,6 @@
 import { app, session } from "electron";
 import { PRELOAD_ID } from "@shared/constants";
+import { IpcChannel } from "@shared/ipc";
 import { Logger } from "@shared/logger";
 import { SourcePatcher } from "@shared/patcher";
 import { isEnabled } from "@shared/settingsResolver";
@@ -13,6 +14,7 @@ import { launchOriginalApp } from "./originalApp";
 import { resolvePaths } from "./paths";
 import { PatchedFileProtocol } from "./protocol/patchedFileProtocol";
 import { SettingsStore } from "./settingsStore";
+import { ThemeService } from "./themes/themeService";
 
 const log = new Logger("main");
 const paths = resolvePaths();
@@ -26,8 +28,9 @@ try {
     const runtime = new NativeRuntime(natives, store, paths, log.child("native"));
     const fileProtocol = new PatchedFileProtocol(paths.originalAsar, new SourcePatcher(enabled), log.child("patcher"));
     const blocker = new RequestBlocker(runtime.blocklists, log.child("network"));
+    const themes = new ThemeService({ builtin: paths.builtinThemes, local: paths.themes }, log.child("themes"));
 
-    registerIpcBridge(paths, store, runtime, fileProtocol);
+    registerIpcBridge({ paths, store, runtime, patches: fileProtocol, themes });
     fileProtocol.hook();
     new NodeRequestGuard(blocker.urls, log.child("network:node")).install();
 
@@ -36,6 +39,7 @@ try {
         session.defaultSession.registerPreloadScript({ id: PRELOAD_ID, type: "frame", filePath: paths.preload });
         fileProtocol.installFallback();
         runtime.start();
+        themes.watch(() => runtime.broadcastCore(IpcChannel.ThemesChanged));
         log.info(`Loaded ${enabled.length}/${plugins.length} plugins:`, enabled.map(plugin => plugin.name).join(", "));
     });
 } catch (error) {

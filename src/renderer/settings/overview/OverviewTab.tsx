@@ -3,6 +3,7 @@ import type { PluginDefinition } from "@shared/plugin";
 import { settingsPath } from "@shared/settingsTabs";
 import { medalUi } from "../../medal/components";
 import type { RendererPluginManager } from "../../pluginManager";
+import type { SettingsContext } from "../context";
 import { runAction, useAsync, usePluginManager } from "../hooks";
 import { Card } from "../ui/Card";
 import { QuickAction } from "../ui/QuickAction";
@@ -52,7 +53,7 @@ const QuickToggle = ({ manager, plugin }: { readonly manager: RendererPluginMana
     );
 };
 
-export const createOverviewTab = (manager: RendererPluginManager) => () => {
+export const createOverviewTab = ({ plugins: manager }: SettingsContext) => () => {
     usePluginManager(manager);
     const { Section, SectionTitle } = medalUi().components;
     const [report] = useAsync(() => MepluhNative.patchReport(), []);

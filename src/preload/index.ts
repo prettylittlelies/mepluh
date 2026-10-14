@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer, webFrame, type IpcRendererEvent } from "ele
 import { IpcChannel, type MepluhNative, type MonacoAssets, type MonacoStyles, type PluginEventListener } from "@shared/ipc";
 import type { PatchReport } from "@shared/patchReport";
 import type { SettingsSnapshot } from "@shared/settings";
+import type { ThemeMeta } from "@shared/themes";
 
 const subscribe = (plugin: string, listener: PluginEventListener): (() => void) => {
     const forward = (_event: IpcRendererEvent, source: string, name: string, payload: unknown): void => {
@@ -29,6 +30,17 @@ const native: MepluhNative = {
     openPath: location => ipcRenderer.invoke(IpcChannel.OpenPath, location) as Promise<void>,
     patchReport: () => ipcRenderer.invoke(IpcChannel.PatchReport) as Promise<PatchReport>,
     loadMonaco,
+    themes: {
+        list: () => ipcRenderer.invoke(IpcChannel.ThemesList) as Promise<readonly ThemeMeta[]>,
+        read: id => ipcRenderer.invoke(IpcChannel.ThemesRead, id) as Promise<string>,
+        fetchOnline: link => ipcRenderer.invoke(IpcChannel.ThemesFetch, link) as Promise<string>,
+        setSettings: settings => ipcRenderer.invoke(IpcChannel.ThemesSet, settings) as Promise<void>,
+        onChanged: listener => {
+            const forward = (): void => listener();
+            ipcRenderer.on(IpcChannel.ThemesChanged, forward);
+            return () => ipcRenderer.off(IpcChannel.ThemesChanged, forward);
+        }
+    },
     invoke: (plugin, handler, args) => ipcRenderer.invoke(IpcChannel.PluginInvoke, plugin, handler, args),
     subscribe
 };

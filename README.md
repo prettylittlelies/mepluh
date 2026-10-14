@@ -17,6 +17,7 @@ Settings live inside Medal's own settings sidebar, rendered entirely with Medal'
 | --- | --- |
 | Mepluh | Status hero, stat tiles, quick actions, privacy toggles |
 | Plugins | Search, status filter, category tabs, plugin cards with per-plugin settings dialogs |
+| Themes | Vencord-style Local / Online themes, theme cards, themes folder, window transparency |
 | Custom CSS | Embedded Monaco editor with CSS IntelliSense, live autosave, Ctrl+S |
 | Patch Report | Every patch applied or failed this session, filterable by plugin |
 
@@ -43,8 +44,22 @@ Medal's Velopack updater replaces `%LOCALAPPDATA%\Medal\current` on every update
 | NoTelemetry | on | Blocks Amplitude, session replay, Sentry and LaunchDarkly event uploads. |
 | FeatureFlags | off | Merges a JSON object over Medal's LaunchDarkly flags in the Redux store. |
 | CustomCSS | on | Live-reloads `%APPDATA%\Mepluh\custom.css`. |
+| WindowEffects | off | Native Windows 11 Acrylic / Mica / Tabbed backdrop for transparent themes. |
 | DevTools | on | F12 / Ctrl+Shift+I on any Medal window. |
 
 ## Writing a plugin
 
 `src/plugins/<name>/index.ts` holds the definition (patches, styles, options, renderer `start`/`stop`). An optional `native.ts` beside it holds main-process behavior (`blocklist`, `handlers`, `start`). Register them in `src/plugins/index.ts` and `src/plugins/natives.ts`.
+
+## Themes
+
+Themes are plain `.css` files with a BetterDiscord-style header (`@name`, `@author`, `@description`, `@version`, `@website`). Drop them into `%APPDATA%\Mepluh\themes` and they appear (and live-reload) in **Mepluh → Themes**. Online themes are fetched by the main process, so Medal's CSP does not block them.
+
+Medal's palette is Tailwind v4 tokens (`--color-first-layer`, `--color-second-layer`, `--color-third-layer`, `--color-neutral-*`, `--color-foreground-*`, `--color-brand-primary-*`, ...), so overriding those on `:root` restyles the whole app.
+
+Built in:
+
+| Theme | Notes |
+| --- | --- |
+| Transparency | Translucent layers; enable **WindowEffects** for the native blur. Tune `--glass-opacity`. |
+| Catppuccin Latte / Frappé / Macchiato / Mocha | Generated from the official palettes (`src/themes/catppuccin`). Set `--ctp-accent` (e.g. `var(--ctp-pink)`) in Custom CSS to change the accent. |

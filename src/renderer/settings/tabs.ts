@@ -1,19 +1,21 @@
 import type { SettingsTabId } from "@shared/settingsTabs";
 import type { Component } from "../medal/types";
-import type { RendererPluginManager } from "../pluginManager";
+import type { SettingsContext } from "./context";
 import { createCustomCssTab } from "./css/CustomCssTab";
 import { createOverviewTab } from "./overview/OverviewTab";
 import { createPatchReportTab } from "./patches/PatchReportTab";
 import { createPluginsTab } from "./plugins/PluginsTab";
+import { createThemesTab } from "./themes/ThemesTab";
 
-type TabFactory = (manager: RendererPluginManager) => Component<object>;
+type TabFactory = (context: SettingsContext) => Component<object>;
 
 const factories: Readonly<Record<SettingsTabId, TabFactory>> = {
     overview: createOverviewTab,
     plugins: createPluginsTab,
+    themes: createThemesTab,
     css: createCustomCssTab,
     patches: createPatchReportTab
 };
 
-export const createTabs = (manager: RendererPluginManager): Readonly<Record<SettingsTabId, Component<object>>> =>
-    Object.fromEntries(Object.entries(factories).map(([id, factory]) => [id, factory(manager)])) as Record<SettingsTabId, Component<object>>;
+export const createTabs = (context: SettingsContext): Readonly<Record<SettingsTabId, Component<object>>> =>
+    Object.fromEntries(Object.entries(factories).map(([id, factory]) => [id, factory(context)])) as Record<SettingsTabId, Component<object>>;

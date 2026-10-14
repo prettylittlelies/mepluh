@@ -1,6 +1,7 @@
 import { rm } from "node:fs/promises";
 import { join } from "node:path";
 import manifest from "../package.json" with { type: "json" };
+import { builtinThemes } from "../src/themes";
 
 const root = join(import.meta.dir, "..");
 const outdir = join(root, "dist");
@@ -47,6 +48,11 @@ const embedCodiconFont = async (): Promise<void> => {
 ${await stylesheet.text()}`);
 };
 
+const writeThemes = async (): Promise<void> => {
+    await Promise.all(builtinThemes.map(({ fileName, css }) => Bun.write(join(outdir, "themes", fileName), css)));
+    console.log(`built ${builtinThemes.length} themes`);
+};
+
 await rm(outdir, { recursive: true, force: true });
-await Promise.all(targets.map(build));
+await Promise.all([...targets.map(build), writeThemes()]);
 await embedCodiconFont();

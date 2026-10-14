@@ -1,6 +1,6 @@
 import type { PatchReportEntry } from "@shared/patchReport";
 import { medalUi } from "../../medal/components";
-import type { RendererPluginManager } from "../../pluginManager";
+import type { SettingsContext } from "../context";
 import { useAsync } from "../hooks";
 import { StatTile } from "../ui/StatTile";
 import { TabPage } from "../ui/TabPage";
@@ -72,7 +72,7 @@ const ReportBody = ({ entries, onRefresh }: { readonly entries: readonly PatchRe
     );
 };
 
-export const createPatchReportTab = (_manager: RendererPluginManager) => () => {
+export const createPatchReportTab = (_context: SettingsContext) => () => {
     const { Skeleton, ErrorText } = medalUi().components;
     const [report, refresh] = useAsync(() => MepluhNative.patchReport(), []);
 

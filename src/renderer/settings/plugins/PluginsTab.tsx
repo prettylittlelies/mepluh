@@ -1,5 +1,5 @@
 import { medalUi } from "../../medal/components";
-import type { RendererPluginManager } from "../../pluginManager";
+import type { SettingsContext } from "../context";
 import { usePluginManager } from "../hooks";
 import { RestartNotice } from "../ui/RestartNotice";
 import { TabPage } from "../ui/TabPage";
@@ -42,7 +42,7 @@ const Toolbar = ({
     );
 };
 
-export const createPluginsTab = (manager: RendererPluginManager) => () => {
+export const createPluginsTab = ({ plugins: manager }: SettingsContext) => () => {
     usePluginManager(manager);
     const { React, components } = medalUi();
     const { Tabs, TabsList, TabsTrigger, EmptyState, Icon } = components;

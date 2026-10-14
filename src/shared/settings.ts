@@ -1,4 +1,5 @@
 import type { OptionValue } from "./options";
+import type { ThemeSettings } from "./themes";
 
 export interface PluginSettings {
     readonly enabled: boolean;
@@ -7,4 +8,5 @@ export interface PluginSettings {
 
 export interface SettingsSnapshot {
     readonly plugins: Readonly<Record<string, PluginSettings>>;
+    readonly themes: ThemeSettings;
 }

@@ -1,10 +1,13 @@
 import { medalUi } from "../medal/components";
 import type { RendererPluginManager } from "../pluginManager";
+import type { ThemeManager } from "../themeManager";
 
 export type AsyncState<T> = { readonly status: "loading" } | { readonly status: "ready"; readonly value: T } | { readonly status: "error"; readonly error: string };
 
 export const usePluginManager = (manager: RendererPluginManager): number =>
     medalUi().React.useSyncExternalStore(manager.subscribe, () => manager.version);
+
+export const useThemeManager = (themes: ThemeManager): number => medalUi().React.useSyncExternalStore(themes.subscribe, () => themes.version);
 
 export const useAsync = <T>(load: () => Promise<T>, dependencies: readonly unknown[]): readonly [AsyncState<T>, () => void] => {
     const { React } = medalUi();

@@ -3,7 +3,8 @@ import { dirname } from "node:path";
 import type { Logger } from "@shared/logger";
 import type { PluginDefinition } from "@shared/plugin";
 import type { PluginSettings, SettingsSnapshot } from "@shared/settings";
-import { resolvePluginSettings, resolveSnapshot } from "@shared/settingsResolver";
+import { resolvePluginSettings, resolveSnapshot, resolveThemeSettings } from "@shared/settingsResolver";
+import type { ThemeSettings } from "@shared/themes";
 
 export class SettingsStore {
     private snapshot: SettingsSnapshot;
@@ -23,7 +24,12 @@ export class SettingsStore {
     public update(name: string, settings: PluginSettings): void {
         const plugin = this.plugins.find(candidate => candidate.name === name);
         if (!plugin) throw new Error(`Unknown plugin "${name}"`);
-        this.snapshot = { plugins: { ...this.snapshot.plugins, [name]: resolvePluginSettings(plugin, settings) } };
+        this.snapshot = { ...this.snapshot, plugins: { ...this.snapshot.plugins, [name]: resolvePluginSettings(plugin, settings) } };
+        this.persist();
+    }
+
+    public updateThemes(themes: ThemeSettings): void {
+        this.snapshot = { ...this.snapshot, themes: resolveThemeSettings(themes) };
         this.persist();
     }
 

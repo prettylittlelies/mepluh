@@ -3,6 +3,7 @@ import { READ_CSS_HANDLER, WRITE_CSS_HANDLER } from "@plugins/customCss/protocol
 import { MonacoEditor } from "../../editor/MonacoEditor";
 import { medalUi } from "../../medal/components";
 import type { RendererPluginManager } from "../../pluginManager";
+import type { SettingsContext } from "../context";
 import { runAction, useAsync, usePluginManager } from "../hooks";
 import { Card } from "../ui/Card";
 import { RestartNotice } from "../ui/RestartNotice";
@@ -97,7 +98,7 @@ const DisabledState = ({ manager }: { readonly manager: RendererPluginManager })
     );
 };
 
-export const createCustomCssTab = (manager: RendererPluginManager) => () => {
+export const createCustomCssTab = ({ plugins: manager }: SettingsContext) => () => {
     usePluginManager(manager);
     const { Skeleton, ErrorText } = medalUi().components;
     const active = manager.settingsOf(customCss).enabled && !manager.needsRestart;

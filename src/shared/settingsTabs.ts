@@ -1,6 +1,7 @@
 export const SETTINGS_TABS = [
     { id: "overview", label: "Mepluh", route: "mepluh" },
     { id: "plugins", label: "Plugins", route: "mepluh-plugins" },
+    { id: "themes", label: "Themes", route: "mepluh-themes" },
     { id: "css", label: "Custom CSS", route: "mepluh-css" },
     { id: "patches", label: "Patch Report", route: "mepluh-patches" }
 ] as const;

@@ -42,10 +42,18 @@ export class NativeRuntime implements NativeHost {
     }
 
     public broadcast(plugin: string, event: string, payload: unknown): void {
+        this.send(IpcChannel.PluginEvent, plugin, event, payload);
+    }
+
+    public broadcastCore(channel: string): void {
+        this.send(channel);
+    }
+
+    private send(channel: string, ...args: readonly unknown[]): void {
         webContents
             .getAllWebContents()
             .filter(contents => contents.session === session.defaultSession && !contents.isDestroyed())
-            .forEach(contents => contents.send(IpcChannel.PluginEvent, plugin, event, payload));
+            .forEach(contents => contents.send(channel, ...args));
     }
 
     public invoke(plugin: string, handler: string, args: readonly unknown[]): unknown {
