@@ -1,10 +1,21 @@
 [![Mepluh](assets/banner.svg)](https://github.com/prettylittlelies/mepluh)
 
-**A client mod for Medal. No ads, no tracking, and themes you actually want.**
+<p align="center"><b>A client mod for Medal. No ads, no tracking, and themes you actually want.</b></p>
 
-[![Bun](https://img.shields.io/badge/Bun-1.x-f9f1e1?logo=bun&logoColor=black)](https://bun.sh) [![Electron](https://img.shields.io/badge/Electron-43-47848f?logo=electron&logoColor=white)](https://www.electronjs.org) [![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)](#install) [![License](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
+<p align="center">
+  <a href="https://github.com/prettylittlelies/mepluh"><img src="https://img.shields.io/github/languages/code-size/prettylittlelies/mepluh?style=for-the-badge&labelColor=0a0a0a&color=cfff53&label=code%20size" alt="Code size"></a>
+  <a href="https://github.com/prettylittlelies/mepluh/stargazers"><img src="https://img.shields.io/github/stars/prettylittlelies/mepluh?style=for-the-badge&labelColor=0a0a0a&color=cfff53&logo=github&logoColor=white" alt="Stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/prettylittlelies/mepluh?style=for-the-badge&labelColor=0a0a0a&color=cfff53" alt="License"></a>
+  <br>
+  <a href="https://bun.sh"><img src="https://img.shields.io/badge/Bun-000000?style=for-the-badge&logo=bun&logoColor=white" alt="Bun"></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-000000?style=for-the-badge&logo=typescript&logoColor=3178c6" alt="TypeScript"></a>
+  <a href="https://www.electronjs.org"><img src="https://img.shields.io/badge/Electron-000000?style=for-the-badge&logo=electron&logoColor=9feaf9" alt="Electron"></a>
+  <a href="#install"><img src="https://img.shields.io/badge/Windows-000000?style=for-the-badge&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTAgMGgxMS4ydjExLjJIMHpNMTIuOCAwSDI0djExLjJIMTIuOHpNMCAxMi44aDExLjJWMjRIMHpNMTIuOCAxMi44SDI0VjI0SDEyLjh6Ii8%2BPC9zdmc%2B" alt="Windows"></a>
+</p>
 
-[Features](#features) · [Install](#install) · [Plugins](#plugins) · [Themes](#themes) · [Contributing](CONTRIBUTING.md)
+<p align="center">
+  <a href="#features">Features</a> · <a href="#install">Install</a> · <a href="#plugins">Plugins</a> · <a href="#themes">Themes</a> · <a href="CONTRIBUTING.md">Contributing</a>
+</p>
 
 ---
 
