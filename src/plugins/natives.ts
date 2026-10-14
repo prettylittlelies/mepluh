@@ -1,0 +1,7 @@
+import type { NativeBinding } from "@main/native";
+import customCss from "./customCss/native";
+import devTools from "./devTools/native";
+import noAds from "./noAds/native";
+import noTelemetry from "./noTelemetry/native";
+
+export const natives: readonly NativeBinding[] = [noAds, noTelemetry, customCss, devTools];

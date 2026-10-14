@@ -1,0 +1,20 @@
+{
+  "name": "mepluh",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Client mod for the Medal desktop app",
+  "scripts": {
+    "build": "bun scripts/build.ts",
+    "typecheck": "tsc --noEmit",
+    "inject": "bun run build && bun src/installer/cli.ts install",
+    "uninject": "bun src/installer/cli.ts uninstall",
+    "status": "bun src/installer/cli.ts status"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "electron": "^39.0.0",
+    "monaco-editor": "0.52.2",
+    "typescript": "^5.9.0"
+  }
+}

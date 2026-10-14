@@ -1,0 +1,9 @@
+export const MOD_NAME = "Mepluh";
+export const SELF_TOKEN = "$self";
+export const IDENTIFIER_TOKEN = "\\i";
+export const IDENTIFIER_PATTERN = "(?:[A-Za-z_$][\\w$]*)";
+export const PRELOAD_ID = "mepluh-preload";
+export const ENTRY_ASAR = "app.asar";
+export const RELOCATED_ASAR = "_app.asar";
+export const UNPACKED_SUFFIX = ".unpacked";
+export const PAYLOAD_DIR = "dist";
