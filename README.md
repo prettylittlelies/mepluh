@@ -1,6 +1,6 @@
 [![Mepluh](assets/banner.svg)](https://github.com/prettylittlelies/mepluh)
 
-**A Vencord-style client mod for Medal. No ads, no tracking, and themes you actually want.**
+**A client mod for Medal. No ads, no tracking, and themes you actually want.**
 
 [![Bun](https://img.shields.io/badge/Bun-1.x-f9f1e1?logo=bun&logoColor=black)](https://bun.sh) [![Electron](https://img.shields.io/badge/Electron-43-47848f?logo=electron&logoColor=white)](https://www.electronjs.org) [![Platform](https://img.shields.io/badge/platform-Windows-0078d4?logo=windows&logoColor=white)](#install) [![License](https://img.shields.io/badge/license-GPL--3.0-blue)](LICENSE)
 
