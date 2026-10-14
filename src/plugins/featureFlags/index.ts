@@ -1,3 +1,4 @@
+import { chunkMarker } from "@shared/chunkPatches";
 import { definePlugin } from "@shared/plugin";
 import { parseOverrides, type FlagMap } from "./overrides";
 
@@ -5,7 +6,7 @@ let overrides: FlagMap = {};
 
 export default definePlugin({
     name: "FeatureFlags",
-    description: "Overrides Medal's LaunchDarkly feature flags at the store level.",
+    description: "Overrides Medal's LaunchDarkly feature flags in both the Redux store and the runtime flag cache.",
     category: "Experimental",
     enabledByDefault: false,
     options: {
@@ -22,6 +23,13 @@ export default definePlugin({
             replacement: {
                 match: /(\[\i\]\(\i,(\i)\)\{)(?=return\(0,\i\.default\)\(\i,\2\.flags\))/,
                 replace: "$1$2={...$2,flags:$self.apply($2.flags)};"
+            }
+        },
+        {
+            find: chunkMarker("renderer-ldFlags"),
+            replacement: {
+                match: /=\((\i),(\i)\)=>(\i)\[\1\]\?\?\2/,
+                replace: "=($1,$2)=>$self.apply($3)[$1]??$2"
             }
         }
     ],
