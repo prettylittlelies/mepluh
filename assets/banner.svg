@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-label="Mepluh, a client mod for Medal">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#11111b"/>
+      <stop offset="1" stop-color="#1e1e2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.78" cy="0.2" r="0.6">
+      <stop offset="0" stop-color="#cba6f7" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#cba6f7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#cdd6f4"/>
+      <stop offset="1" stop-color="#cba6f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="320" rx="24" fill="url(#bg)"/>
+  <rect width="1280" height="320" rx="24" fill="url(#glow)"/>
+  <rect x="0.5" y="0.5" width="1279" height="319" rx="23.5" fill="none" stroke="#ffffff" stroke-opacity="0.08"/>
+  <g transform="translate(96 108)">
+    <rect width="104" height="104" rx="28" fill="#cba6f7" fill-opacity="0.14" stroke="#cba6f7" stroke-opacity="0.45"/>
+    <path d="M52 22 L60 44 L82 52 L60 60 L52 82 L44 60 L22 52 L44 44 Z" fill="#cba6f7"/>
+  </g>
+  <text x="240" y="170" font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-size="88" font-weight="800" letter-spacing="-2" fill="url(#title)">Mepluh</text>
+  <text x="244" y="216" font-family="Inter, 'Segoe UI', system-ui, sans-serif" font-size="28" font-weight="500" fill="#a6adc8">A client mod for the Medal desktop app</text>
+</svg>
