@@ -54,4 +54,4 @@ Built in: **Catppuccin** (Latte, Frappé, Macchiato, Mocha) and **Transparency**
 
 ## License
 
-[GPL-3.0-or-later](LICENSE), the same as Vencord.
+[GPL-3.0-or-later](LICENSE)
