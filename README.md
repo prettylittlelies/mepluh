@@ -63,3 +63,7 @@ Built in:
 | --- | --- |
 | Transparency | Translucent layers; enable **WindowEffects** for the native blur. Tune `--glass-opacity`. |
 | Catppuccin Latte / Frappé / Macchiato / Mocha | Generated from the official palettes (`src/themes/catppuccin`). Set `--ctp-accent` (e.g. `var(--ctp-pink)`) in Custom CSS to change the accent. |
+
+## License
+
+GPL-3.0-or-later, the same license as Vencord. See [LICENSE](LICENSE).
