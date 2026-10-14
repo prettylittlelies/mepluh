@@ -3,6 +3,7 @@ import { IpcChannel, type MepluhNative, type MonacoAssets, type MonacoStyles, ty
 import type { PatchReport } from "@shared/patchReport";
 import type { SettingsSnapshot } from "@shared/settings";
 import type { ThemeMeta } from "@shared/themes";
+import { isMainWindowUrl } from "@shared/windows";
 
 const subscribe = (plugin: string, listener: PluginEventListener): (() => void) => {
     const forward = (_event: IpcRendererEvent, source: string, name: string, payload: unknown): void => {
@@ -45,7 +46,7 @@ const native: MepluhNative = {
     subscribe
 };
 
-if (location.protocol === "file:" && process.isMainFrame) {
+if (location.protocol === "file:" && process.isMainFrame && isMainWindowUrl(location.pathname)) {
     contextBridge.exposeInMainWorld("MepluhNative", native);
     void webFrame.executeJavaScript(ipcRenderer.sendSync(IpcChannel.RendererSource) as string);
 }

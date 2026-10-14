@@ -1,5 +1,6 @@
 import { app, webContents, type Input, type WebContents } from "electron";
 import { defineNative } from "@main/native";
+import { isOverlayFile } from "@shared/windows";
 import devTools from ".";
 
 const isToggleChord = (input: Input): boolean =>
@@ -9,7 +10,7 @@ export default defineNative(devTools, {
     start({ options }) {
         const attach = (contents: WebContents): void => {
             contents.on("before-input-event", (event, input) => {
-                if (!isToggleChord(input)) return;
+                if (!isToggleChord(input) || isOverlayFile(contents.getURL())) return;
                 event.preventDefault();
                 if (contents.isDevToolsOpened()) contents.closeDevTools();
                 else contents.openDevTools({ mode: options.detached ? "detach" : "right" });

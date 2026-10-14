@@ -1,13 +1,13 @@
 import { app, BrowserWindow } from "electron";
 import { defineNative } from "@main/native";
+import { isMainWindowUrl } from "@shared/windows";
 import windowEffects, { NATIVE_BACKDROP, WINDOW_MATERIALS, type WindowMaterial } from ".";
 
-const MAIN_RENDERER = "renderer.min.html";
 const TRANSPARENT = "#00000000";
 
 const isMaterial = (value: string): value is WindowMaterial => WINDOW_MATERIALS.some(material => material.value === value);
 
-const isMainWindow = (window: BrowserWindow): boolean => !window.isDestroyed() && window.webContents.getURL().endsWith(MAIN_RENDERER);
+const isMainWindow = (window: BrowserWindow): boolean => !window.isDestroyed() && isMainWindowUrl(window.webContents.getURL());
 
 export default defineNative(windowEffects, {
     start({ options, log }) {

@@ -3,6 +3,7 @@ import { extname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Logger } from "@shared/logger";
 import type { SourcePatcher } from "@shared/patcher";
+import { isOverlayFile } from "@shared/windows";
 import type { PatchLedger } from "./patchLedger";
 
 type Handler = (request: Request) => Response | Promise<Response>;
@@ -56,7 +57,7 @@ export class PatchedFileProtocol {
     }
 
     private isPatchable(path: string): boolean {
-        return this.ledger.owns(path) && SCRIPT_EXTENSIONS.has(extname(path).toLowerCase());
+        return this.ledger.owns(path) && !isOverlayFile(path) && SCRIPT_EXTENSIONS.has(extname(path).toLowerCase());
     }
 
     private load(path: string, response: Response): Promise<string> {
