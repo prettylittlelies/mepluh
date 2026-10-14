@@ -1,62 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-label="mepluh, a client mod for medal">
-  <defs>
-    <filter id="ripple" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
-      <feTurbulence type="turbulence" baseFrequency="0.0016 0.008" numOctaves="1" seed="11" result="flow"/>
-      <feDisplacementMap in="SourceGraphic" in2="flow" scale="30" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="refraction" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
-      <feTurbulence type="turbulence" baseFrequency="0.0032 0.0085" numOctaves="1" seed="29" result="flow"/>
-      <feDisplacementMap in="SourceGraphic" in2="flow" scale="30" xChannelSelector="R" yChannelSelector="G"/>
-    </filter>
-    <filter id="glass" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="height"/>
-      <feSpecularLighting in="height" surfaceScale="7" specularConstant="1.7" specularExponent="22" lighting-color="#ffffff" result="specular">
-        <fePointLight x="380" y="-160" z="300"/>
-      </feSpecularLighting>
-      <feComposite in="specular" in2="SourceAlpha" operator="in" result="highlight"/>
-      <feMorphology in="SourceAlpha" operator="erode" radius="1.4" result="core"/>
-      <feComposite in="SourceAlpha" in2="core" operator="out" result="rim"/>
-      <feColorMatrix in="rim" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.7 0" result="rimLight"/>
-      <feMerge>
-        <feMergeNode in="SourceGraphic"/>
-        <feMergeNode in="highlight"/>
-        <feMergeNode in="rimLight"/>
-      </feMerge>
-    </filter>
-    <filter id="grain" x="0" y="0" width="100%" height="100%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch" seed="3" result="noise"/>
-      <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.07 0"/>
-    </filter>
-    <pattern id="ambient-lines" width="1280" height="5" patternUnits="userSpaceOnUse">
-      <rect width="1280" height="1" fill="#ffffff" fill-opacity="0.16"/>
-    </pattern>
-    <pattern id="refracted-lines" width="1280" height="6" patternUnits="userSpaceOnUse">
-      <rect width="1280" height="1.5" fill="#ffffff" fill-opacity="0.62"/>
-    </pattern>
-    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#000"/>
-      <stop offset="0.18" stop-color="#fff"/>
-      <stop offset="0.82" stop-color="#fff"/>
-      <stop offset="1" stop-color="#000"/>
-    </linearGradient>
-    <mask id="fade-mask">
-      <rect width="1280" height="360" fill="url(#fade)"/>
-    </mask>
-    <clipPath id="letterforms">
-      <text x="640" y="228" text-anchor="middle" font-family="Inter, 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif" font-size="196" font-weight="800" letter-spacing="-9">mepluh</text>
-    </clipPath>
-  </defs>
-  <rect width="1280" height="360" fill="#09090b"/>
-  <g mask="url(#fade-mask)">
-    <rect width="1280" height="360" fill="url(#ambient-lines)" filter="url(#ripple)"/>
-  </g>
-  <g clip-path="url(#letterforms)">
-    <rect width="1280" height="360" fill="#09090b"/>
-    <rect width="1280" height="360" fill="url(#refracted-lines)" filter="url(#refraction)"/>
-  </g>
-  <text x="640" y="228" text-anchor="middle" font-family="Inter, 'Segoe UI Variable Display', 'Segoe UI', system-ui, sans-serif" font-size="196" font-weight="800" letter-spacing="-9" fill="#f4f4f5" fill-opacity="0.06" filter="url(#glass)">mepluh</text>
-  <rect x="64" y="308" width="18" height="2" fill="#cfff53"/>
-  <text x="94" y="318" text-anchor="start" font-family="'JetBrains Mono', 'Cascadia Code', Consolas, monospace" font-size="13" letter-spacing="3" fill="#71717a">A CLIENT MOD FOR MEDAL</text>
-  <text x="1216" y="318" text-anchor="end" font-family="'JetBrains Mono', 'Cascadia Code', Consolas, monospace" font-size="13" letter-spacing="3" fill="#71717a">github.com/prettylittlelies/mepluh</text>
-  <rect width="1280" height="360" filter="url(#grain)" pointer-events="none"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-label="mepluh">
+<rect width="1280" height="320" fill="#000000"/>
+<g transform="translate(342.23 74.05) scale(3.7136)" fill="#ffffff">
+<path d="M9.64883 28.901L15.4441 25.5973C15.9165 25.3269 15.9128 24.6426 15.4349 24.3814L9.55325 21.1494C9.16359 20.936 8.68754 21.2174 8.68754 21.6626V28.3437C8.68754 28.8385 9.22057 29.1475 9.64883 28.9029V28.901Z"/>
+<path d="M27.2669 28.901L21.4716 25.5973C20.9992 25.3269 21.0029 24.6426 21.4808 24.3814L27.3625 21.1494C27.7521 20.936 28.2282 21.2174 28.2282 21.6626V28.3437C28.2282 28.8385 27.6951 29.1475 27.2669 28.9029V28.901Z"/>
+<path d="M36.2575 12.2382L31.381 9.30402C31.0281 9.09247 30.5869 9.08695 30.2303 9.29115L19.0178 15.715C18.6612 15.9192 18.2237 15.9192 17.8671 15.715L6.65278 9.29299C6.29619 9.08879 5.85504 9.09247 5.50212 9.30586L0.623757 12.2382C0.272677 12.4497 0.0576172 12.8287 0.0576172 13.2389V26.7949C0.0576172 27.1849 0.257972 27.5492 0.586995 27.7589L4.76504 30.4079C4.85143 30.4631 5.02421 30.5698 5.22089 30.6931C5.63814 30.9524 6.17671 30.6508 6.17303 30.1596C6.17303 29.9499 6.17303 29.7585 6.17303 29.6408L6.19509 17.573C6.19509 16.9328 6.88806 16.5337 7.44317 16.8519L17.8359 22.8306C18.2109 23.0458 18.6704 23.0458 19.0435 22.8306L29.4362 16.8519C29.9914 16.5337 30.6825 16.9328 30.6843 17.573L30.7064 29.6408C30.7064 29.7475 30.7082 29.9425 30.7101 30.1633C30.7137 30.6507 31.2505 30.9488 31.664 30.6894C31.8497 30.5735 32.0188 30.4686 32.1144 30.4079L36.2924 27.7589C36.6214 27.5492 36.8218 27.1868 36.8218 26.7949V13.2389C36.8218 12.8287 36.6067 12.4479 36.2557 12.2382H36.2575Z"/>
+</g>
+<path d="M524.02 189V146.85H516.09V131H532.33V140.47H536.58Q539.68 135.45 544.61 132.69Q549.54 129.94 556.79 129.94Q563.75 129.94 568.73 132.4Q573.7 134.87 576.7 139.7H577.09Q583.76 129.94 596.9 129.94Q608.12 129.94 614.69 136.46Q621.26 142.99 621.26 154.1V189H605.22V157.2Q605.22 144.24 592.94 144.24Q580.66 144.24 580.66 157.2V189H564.62V157.2Q564.62 144.24 552.15 144.24Q546.15 144.24 543.11 147.43Q540.06 150.62 540.06 157.2V189ZM661.19 190.16Q651.81 190.16 644.85 186.44Q637.89 182.72 634.12 175.9Q630.35 169.09 630.35 159.81Q630.35 150.53 634.02 143.81Q637.7 137.09 644.51 133.47Q651.33 129.84 660.61 129.84Q669.69 129.84 676.22 133.32Q682.74 136.8 686.22 143.28Q689.7 149.75 689.7 158.74V164.16H645.72Q646.69 170.63 650.65 174.02Q654.61 177.4 661.09 177.4Q666.21 177.4 669.21 175.66Q672.21 173.92 673.46 170.34H689.51Q687.58 179.62 680.13 184.89Q672.69 190.16 661.19 190.16ZM646.11 153.52H674.33Q673.56 148.01 670.08 145.26Q666.6 142.5 660.7 142.5Q654.81 142.5 651.09 145.31Q647.36 148.11 646.11 153.52ZM703.43 212.2V146.85H695.5V131H711.74V140.47H715.8Q718.9 135.45 724.07 132.64Q729.24 129.84 736.59 129.84Q745.58 129.84 751.76 133.61Q757.95 137.38 761.14 144.15Q764.33 150.91 764.33 160Q764.33 169.09 761.24 175.9Q758.14 182.72 752.25 186.44Q746.35 190.16 737.94 190.16Q731.56 190.16 727.02 187.79Q722.47 185.42 719.86 181.07H719.48V212.2ZM733.59 176.24Q740.94 176.24 744.61 171.89Q748.28 167.54 748.28 160Q748.28 152.46 744.61 148.11Q740.94 143.76 733.59 143.76Q727.11 143.76 723.3 147.38Q719.48 151.01 719.48 157.39V162.61Q719.48 168.99 723.3 172.62Q727.11 176.24 733.59 176.24ZM774.19 189V107.8H790.24V189ZM827.84 190.06Q815.76 190.06 809.28 183.68Q802.8 177.3 802.8 166.28V131H818.85V163.19Q818.85 169.47 822.09 172.62Q825.33 175.76 831.8 175.76Q838.47 175.76 842.1 172.37Q845.72 168.99 845.72 162.71V131H861.77V173.15H869.7V189H853.46V179.53H849.4Q845.92 184.65 840.94 187.36Q835.96 190.06 827.84 190.06ZM878.59 189V107.8H894.64V139.31H895.02Q897.83 134.67 902.56 132.31Q907.3 129.94 913.78 129.94Q924.7 129.94 931.13 136.56Q937.56 143.18 937.56 154.3V189H921.51V157.29Q921.51 150.91 918.08 147.58Q914.65 144.24 908.07 144.24Q901.5 144.24 898.07 147.58Q894.64 150.91 894.64 157.29V189Z" fill="#cfff53"/>
 </svg>

@@ -9,8 +9,7 @@
     "typecheck": "tsc --noEmit",
     "inject": "bun run build && bun src/installer/cli.ts install",
     "uninject": "bun src/installer/cli.ts uninstall",
-    "status": "bun src/installer/cli.ts status",
-    "banner": "bun scripts/banner/index.ts"
+    "status": "bun src/installer/cli.ts status"
   },
   "devDependencies": {
     "@types/bun": "latest",
