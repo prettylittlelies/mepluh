@@ -1,3 +1,4 @@
+import { Logger } from "@shared/logger";
 import { importExport } from "./chunks";
 import type { Children, Component, JsxRuntime, MedalNode, ReactApi } from "./types";
 
@@ -102,6 +103,8 @@ export interface MedalUi {
     readonly toast: (options: ToastOptions) => void;
 }
 
+const log = new Logger("medal");
+
 type Source = readonly [chunk: string, exportName: string];
 
 const factorySources = {
@@ -129,7 +132,6 @@ const componentSources = {
     Icon: ["renderer-icon-assets-provider", "t"],
     Badge: ["renderer-badge", "t"],
     Separator: ["renderer-separator.2", "t"],
-    Link: ["renderer-Link", "t"],
     EmptyState: ["renderer-EmptyState", "t"],
     Skeleton: ["renderer-skeleton", "t"],
     Input: ["renderer-FieldControl", "t"],
@@ -153,7 +155,9 @@ const componentSources = {
     Tooltip: ["renderer-useHoverShared", "t"],
     TooltipTrigger: ["renderer-useHoverShared", "r"],
     TooltipContent: ["renderer-useHoverShared", "n"]
-} as const satisfies Record<keyof MedalComponents, Source>;
+} as const satisfies Record<Exclude<keyof MedalComponents, "Link">, Source>;
+
+const linkSource: Source = ["renderer-Link", "t"];
 
 const isRenderable = (value: unknown): boolean => typeof value === "function" || (typeof value === "object" && value !== null && "$$typeof" in value);
 
@@ -169,8 +173,25 @@ const resolveFactory = async <T>(source: Source): Promise<T> => {
     return (factory as () => T)();
 };
 
+const FallbackLink: MedalComponents["Link"] = ({ children, className, to, href, newWindow }) =>
+    medalUi().runtime.jsx("a", {
+        className,
+        children,
+        href: href ?? (to === undefined ? undefined : `#${to}`),
+        ...(newWindow ? { target: "_blank", rel: "noreferrer" } : {})
+    });
+
+const resolveLink = (): Promise<unknown> =>
+    resolveSource(linkSource).catch((error: unknown) => {
+        log.warn("Medal's Link chunk is unavailable, using a plain anchor instead", error);
+        return FallbackLink;
+    });
+
 const resolveComponents = async (): Promise<MedalComponents> => {
-    const entries = await Promise.all(Object.entries(componentSources).map(async ([key, source]) => [key, await resolveSource(source)] as const));
+    const entries = await Promise.all([
+        ...Object.entries(componentSources).map(async ([key, source]) => [key, await resolveSource(source)] as const),
+        resolveLink().then(link => ["Link", link] as const)
+    ]);
     return Object.fromEntries(entries) as unknown as MedalComponents;
 };
 
